@@ -74,7 +74,7 @@ app.delete("/repositories/:id", validateId, (request, response) => {
 });
 
 app.post("/repositories/:id/like",validateId, (request, response) => {
-  const { id } = request.params
+  const { id } = request.body
 
   const indexfound = repositories.findIndex((repository) => repository.id == id)
 
@@ -82,10 +82,11 @@ app.post("/repositories/:id/like",validateId, (request, response) => {
     return response.status(400).json({error:"id not found"})
   }
 
+  const likes = repositories[indexfound].likes
   
-  repositories[indexfound].likes = Number(repositories[indexfound].likes) + 1
+  repositories[indexfound].likes = likes + 1
 
-  return response.json({alllikes: repositories[indexfound].likes})
+  return response.json({likes: repositories[indexfound].likes})
 
 
 });
