@@ -85,9 +85,7 @@ app.post("/repositories/:id/like",validateId, (request, response) => {
   
   repositories[indexfound].likes = Number(repositories[indexfound].likes) + 1
 
-  return response.json({
-    success: "liked (y)",
-    alllikes: repositories[indexfound].likes })
+  return response.json({alllikes: repositories[indexfound].likes})
 
 
 });
