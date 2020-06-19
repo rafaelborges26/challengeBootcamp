@@ -79,7 +79,7 @@ app.post("/repositories/:id/like",validateId, (request, response) => {
   const indexfound = repositories.findIndex((repository) => repository.id == id)
 
   if(indexfound < 0){
-    return response.status(404).json({error:"id not found"})
+    return response.status(400).json({error:"id not found"})
   }
 
   
