@@ -22,7 +22,8 @@ function validateId(request, response, next) {
 }
 
 app.get("/repositories", (request, response) => {
-  return response.send(repositories)
+  const arrayContainer = repositories 
+  return response.json(arrayContainer)
 
 });
 
@@ -33,7 +34,7 @@ app.post("/repositories", (request, response) => {
   const likes = 0
   const repository = {id, title, url, techs, likes}
   repositories.push(repository)
-  return response.json({repository})
+  return response.json(repository)
 
 });
 
@@ -46,49 +47,49 @@ app.put("/repositories/:id",validateId, (request, response) => {
     return response.status(404).json({error:"Id not found"})
   }
 
-
   repositories[indexfound].title = title
   repositories[indexfound].url = url
   repositories[indexfound].techs = techs
 
    repository = repositories[indexfound]
 
-  return response.json({repository})
+  return response.json(repository)
 
 });
 
-app.delete("/repositories/:id", validateId, (request, response) => {
+app.delete("/repositories/:id",validateId, (request, response) => {
   const { id } = request.params
+  const { title, techs } = request.body
 
   const indexfound = repositories.findIndex((repository) => repository.id == id)
 
   if(indexfound < 0){
-    return response.status(404).json({error:"id not found"})
+    return response.status(400).json({error:"index not found"})
   }
 
   repositories.splice(indexfound, 1)
 
-  return response.status(204).json({})
+  return response.status(204).json()
   
 
 });
 
-app.post("/repositories/:id/like",validateId, (request, response) => {
-  const { id } = request.body
-
+app.post("/repositories/:id/like", (request, response) => {
+  const { title, url, techs, likes } = request.body
+  const { id } = request.params
+  const repository = {id, title, url, techs, likes}
+  
   const indexfound = repositories.findIndex((repository) => repository.id == id)
 
   if(indexfound < 0){
     return response.status(400).json({error:"id not found"})
   }
 
-  const likes = repositories[indexfound].likes
-  
-  repositories[indexfound].likes = likes + 1
+  repository.likes = repository.likes + 1
+  repositories.push(repository)
+  repositories[indexfound].likes = repositories[indexfound].likes + 1
 
-  return response.json({likes: repositories[indexfound].likes})
-
-
+  return response.json({likes: repositories[indexfound].likes})  
 });
 
 module.exports = app;
