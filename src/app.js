@@ -75,9 +75,9 @@ app.delete("/repositories/:id",validateId, (request, response) => {
 });
 
 app.post("/repositories/:id/like", (request, response) => {
-  const { title, url, techs, likes } = request.body
+  const { title, url, techs } = request.body
   const { id } = request.params
-  const repository = {id, title, url, techs, likes}
+  const repository = {id, title, url, techs}
   
   const indexfound = repositories.findIndex((repository) => repository.id == id)
 
@@ -86,10 +86,11 @@ app.post("/repositories/:id/like", (request, response) => {
   }
 
   repository.likes = repository.likes + 1
-  repositories.push(repository)
+  //repositories.push(repository)
   repositories[indexfound].likes = repositories[indexfound].likes + 1
+  //repositories[indexfound].likes = likes
 
-  return response.json({likes: repositories[indexfound].likes})  
+  return response.json(repositories[indexfound])  
 });
 
 module.exports = app;
